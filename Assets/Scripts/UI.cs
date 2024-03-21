@@ -7,6 +7,7 @@ using System.Collections;
 public class UI : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI _healthBar1;
+    [SerializeField] private Slider _healthBar2;
     [SerializeField] private Slider _healthBar3;
 
     private Character _character;
@@ -31,6 +32,7 @@ public class UI : MonoBehaviour
     private void ChangeHealth(float healthPoint)
     {
         _healthBar1.text = healthPoint.ToString() + '/' + _character.MaxHealth.ToString();
+        _healthBar2.value = healthPoint;
 
         if (_changesSmoothly != null)
             StopCoroutine(_changesSmoothly);
@@ -41,6 +43,7 @@ public class UI : MonoBehaviour
     private void ChangeMaxHealth(float maxHealthPoint)
     {
         _healthBar1.text = _character.Health.ToString() + '/' + maxHealthPoint;
+        _healthBar2.maxValue = maxHealthPoint;
         _healthBar3.maxValue = maxHealthPoint;
     }
 
