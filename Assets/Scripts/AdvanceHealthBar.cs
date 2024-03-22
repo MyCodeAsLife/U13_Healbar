@@ -2,41 +2,28 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 
-[RequireComponent(typeof(Character))]
-public class AdvancedHealthBar : MonoBehaviour
+public class AdvancedHealthBar : HealthBar
 {
     [SerializeField] private Slider _healthBar;
 
-    private Character _character;
     private Coroutine _changesSmoothly;
 
-    private void OnDisable()
-    {
-        _character.UnsubscribeHealthChanged(ChangeHealth);
-    }
-
-    private void Start()
-    {
-        _character = GetComponent<Character>();
-        _character.SubscribeHealthChanged(ChangeHealth);
-        ChangeHealth(_character.CurrentProcentHealth);
-    }
-
-    private void ChangeHealth(float procentHealth)
+    protected override void ChangeHealth(float currentHealth, float maxHealth)
     {
         if (_changesSmoothly != null)
             StopCoroutine(_changesSmoothly);
 
-        _changesSmoothly = StartCoroutine(ChangesSmoothly(procentHealth));
+        _changesSmoothly = StartCoroutine(ChangesSmoothly(currentHealth, maxHealth));
     }
 
-    private IEnumerator ChangesSmoothly(float healthPoint)
+    private IEnumerator ChangesSmoothly(float curentHealth, float maxHealt)
     {
         float speed = 1;
+        float value = curentHealth / maxHealt;
 
-        while (_healthBar.value != healthPoint)
+        while (_healthBar.value != value)
         {
-            _healthBar.value = Mathf.MoveTowards(_healthBar.value, healthPoint, speed * Time.deltaTime);
+            _healthBar.value = Mathf.MoveTowards(_healthBar.value, value, speed * Time.deltaTime);
             yield return null;
         }
 

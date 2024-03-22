@@ -7,7 +7,6 @@ public class Character : MonoBehaviour, IDamageble, IHealable
 
     public float MaxHealth => _health.MaxValue;
     public float CurrentHealth => _health.Value;
-    public float CurrentProcentHealth => _health.PercentValue;
 
     private void Awake()
     {
@@ -26,12 +25,12 @@ public class Character : MonoBehaviour, IDamageble, IHealable
         _health.Increase(healing);
     }
 
-    public void SubscribeHealthChanged(Action<float> function)
+    public void SubscribeHealthChanged(Action<float, float> function)
     {
         _health.OnChange += function;
     }
 
-    public void UnsubscribeHealthChanged(Action<float> function)
+    public void UnsubscribeHealthChanged(Action<float, float> function)
     {
         _health.OnChange -= function;
     }
